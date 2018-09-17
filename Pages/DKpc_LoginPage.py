@@ -9,6 +9,7 @@ import time
 from selenium.webdriver.common.action_chains import ActionChains
 from BaseSe.Base import Base_image_move_distance as Bimd
 import random
+from Conf.Post import Post
 
 class DKpc_LoginPage(Pyse):
 
@@ -29,6 +30,8 @@ class DKpc_LoginPage(Pyse):
     # sign_slider_xpath = "//div[@class='geetest_panel_next']//div[@class='geetest_slider_button']"
     # 图片刷新按钮
     refresh_button_xpath = "//div[@class='geetest_panel_next']//div[@class='geetest_panel']//a[@class='geetest_refresh_1']"
+    # 超过图片次数刷新
+    error_refresh_button_xpath = "//div[@class='geetest_panel_box']//div[@class='geetest_panel_error_content']"
 
     """用户参数"""
     # 用户名密码
@@ -66,26 +69,37 @@ class DKpc_LoginPage(Pyse):
             time.sleep(0.5)  # 0.5秒后释放鼠标
             ActionChains(self.driver).release().perform()
 
-
+        # 输入登录用户信息
         self.send_keys(self.user_input_xpath, self.user)
         self.send_keys(self.password_input_xpath, self.password)
         time.sleep(1)
         self.find_element(*self.login_button_xpath).click()
 
+        # 加载页面后先滑动一次滑块，如未成功再重试
         move_slider()
         time.sleep(3)
+        # 重试滑块
         try:
             while True:
-                dra = self.driver.find_element_by_xpath(self.refresh_button_xpath)
-                if dra:
-                    self.driver.find_element_by_xpath(self.refresh_button_xpath).click()
-                    move_slider()
-                    time.sleep(3)
-                else:
-                    break
+                try:
+                    # 先查找滑块页面下部的刷新按钮，找到后刷新，如页面为找到该刷新按钮则找加载过多的刷新按钮
+                    dra = self.driver.find_element_by_xpath(self.refresh_button_xpath)
+                    if dra:
+                        dra.click()
+                        move_slider()
+                        time.sleep(3)
+                except:
+                    try:
+                        # 未找到滑块下部的刷新按钮时，优先查找加载过多的刷新按钮
+                        error_button_element = self.driver.find_element_by_xpath(self.error_refresh_button_xpath)
+                        error_button_element.click()
+                        time.sleep(3)
+                    except:
+                        # 都未找到则跳出循环
+                        break
         except Exception as e:
-            print("滑块验证错误：{}".format(e))
-            pass
+            print("页面找不到刷新按钮或滑块验证失败：{}".format(e))
+            self.driver.quit()
 
 
 
