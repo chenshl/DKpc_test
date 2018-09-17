@@ -4,6 +4,7 @@
 # Selenium以外的基础方法
 
 from PIL import Image
+import requests
 
 class Base_image_move_distance(object):
     """
@@ -37,7 +38,7 @@ class Base_image_move_distance(object):
         """
         orimage = self.contrast_OriginalImage()
         lens = self.get_diff_location(self.login_image, orimage)
-        return lens - 827
+        return lens - 827 -10  # -10为根据实际定位效果往回退10个像素
 
     def contrast_OriginalImage(self):
         """
@@ -48,8 +49,8 @@ class Base_image_move_distance(object):
         try:
             for i in self.original_image_list:
                 # 对比两张图片同一点位上的像素值大小
-                pixel1 = self.login_image.getpixel((1004, 381))
-                pixel2 = i.getpixel((1004, 381))
+                pixel1 = self.login_image.getpixel((1045, 344))
+                pixel2 = i.getpixel((1045, 344))
                 # pixel[0]代表R值，pixel[1]代表G值，pixel[2]代表B值
                 if abs(pixel1[0] - pixel2[0]) < 5 and abs(pixel1[1] - pixel2[1] < 5) and abs(pixel1[2] - pixel2[2] < 5):
                     return i

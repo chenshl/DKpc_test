@@ -10,7 +10,7 @@ class DKpc_HomePage(Pyse):
 
     """定位器"""
     # 币币交易tab页面
-    tab_Switch_exchange = (By.XPATH, "//ul[@class='ivu-menu']//a[@href='#/exchange']/li[contains(text(),'币币交易')]")
+    tab_Switch_exchange = (By.XPATH, "//ul[@class='ivu-menu']//a[@href='#/exchange']")
     # 登录按钮
     # button_jump_login = (By.XPATH, "//ul[@class='ivu-menu']//a[@href='#/login']//li[contains(text(),'登录')]")
     button_jump_login = (By.XPATH, "//ul[@class='ivu-menu']//a[@href='#/login']")

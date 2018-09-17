@@ -13,7 +13,7 @@ def create_suite():
 
     discover = unittest.defaultTestLoader.discover(
         start_dir=test_dir,
-        pattern='Test_*.py',
+        pattern='Test_DKpc.py',  # 指定执行文件
         top_level_dir=None
     )
  
