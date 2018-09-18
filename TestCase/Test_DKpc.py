@@ -39,14 +39,14 @@ class DKpcCase(unittest.TestCase):
         driver.quit()
 
 
-    def test_switch_unlogin(self):
+    def test_1_switch_unlogin(self):
         """
         @description: 测试预览页面,未登录状态
         :return: 
         """
         self.DKpc_startPage.switch_homePage_unlogin()
 
-    def test_switch_login(self):
+    def test_2_switch_login(self):
         """
         @description: 用户登录and个人中心浏览
         :return: 
