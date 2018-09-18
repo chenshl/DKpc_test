@@ -51,9 +51,11 @@ class DKpcCase(unittest.TestCase):
         @description: 用户登录and个人中心浏览
         :return: 
         """
+        # 登录
         self.DKpc_startPage.open_loginPage()
         self.DKpc_login = DKpc_LoginPage(self.driver, self.url, self.title)
         self.DKpc_login.login_put()
+        # 个人中心
         self.DKpc_startPage.open_uc_assets_page()
         self.DKpc_Ucassets = DKpc_UcassetsPage(self.driver, self.url, self.title)
         self.DKpc_Ucassets.browse_DKpc_UcassetsPage_elements()

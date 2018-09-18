@@ -6,6 +6,7 @@ from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import * #导入所有的异常类
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+import time
 
 class Pyse(object):
     original_window = None
@@ -257,3 +258,10 @@ class Pyse(object):
             return False
         else:
             return True
+
+    def page_waiting(self):
+        """
+        @description: 页面固定等待时间，便于页面停顿效果
+        :return: 
+        """
+        time.sleep(1)

@@ -53,7 +53,7 @@ class DKpc_LoginPage(Pyse):
             :return: 
             """
             # 拖动验证滑块,注：拖动定位不能使用（By.XPATH,""），否则报元组参数错误，使用基础的定位方法
-            time.sleep(1)
+            self.page_waiting()
             self.driver.save_screenshot(self.save_image_path)  # 屏幕截图
             move_distance = Bimd(self.save_image_path).move_distance()
             tracks = Bimd().get_tracks(move_distance)
@@ -72,7 +72,7 @@ class DKpc_LoginPage(Pyse):
         # 输入登录用户信息
         self.send_keys(self.xpath_user_input, self.user)
         self.send_keys(self.xpath_password_input, self.password)
-        time.sleep(1)
+        self.page_waiting()
         self.find_element(*self.xpath_login_button).click()
 
         # 加载页面后先滑动一次滑块，如未成功再重试
