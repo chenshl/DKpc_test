@@ -4,34 +4,34 @@
 # 登录页面
 
 from selenium.webdriver.common.by import By
-from BaseSe.Selenium3 import Pyse
-import time
 from selenium.webdriver.common.action_chains import ActionChains
+import time
+
+from BaseSe.Selenium3 import Pyse
 from BaseSe.Base import Base_image_move_distance as Bimd
-import random
-from Conf.Post import Post
 
 class DKpc_LoginPage(Pyse):
 
     """定位器"""
     # 用户名输入框
-    user_input_xpath = (By.XPATH, "//div[@class='ivu-form-item-content']//input[@class='ivu-input' and @name='user']")
+    xpath_user_input = (By.XPATH, "//div[@class='ivu-form-item-content']//input[@class='ivu-input' and @name='user']")
     # 密码输入框
-    password_input_xpath = (By.XPATH, "//div[@class='ivu-form-item-content']//input[@class='ivu-input' and @type='password']")
+    xpath_password_input = (By.XPATH, "//div[@class='ivu-form-item-content']//input[@class='ivu-input' and @type='password']")
     # 登录按钮
-    login_button_xpath = (By.XPATH, "//div[@class='ivu-form-item-content']//button[@id='loginBut']")
+    xpath_login_button = (By.XPATH, "//div[@class='ivu-form-item-content']//button[@id='loginBut']")
+
     # 忘记密码
-    find_pwd_xpath = (By.XPATH, "//form[@autocomplete='off']//p//a")
+    xpath_find_pwd = (By.XPATH, "//form[@autocomplete='off']//p//a")
     # 跳转回登录页面登录按钮
-    back_login_page_xpath = (By.XPATH, "//ul[@class='ivu-menu']/a/li[contains(text(),'登录')]")
+    xpath_back_login_page = (By.XPATH, "//ul[@class='ivu-menu']/a/li[contains(text(),'登录')]")
     # 点击滑块
-    slider_button_xpath = "//div[@class='geetest_slider geetest_ready']//div[@class='geetest_slider_button']"
+    xpath_slider_button = "//div[@class='geetest_slider geetest_ready']//div[@class='geetest_slider_button']"
     # 滑块未重合页面标识
     # sign_slider_xpath = "//div[@class='geetest_panel_next']//div[@class='geetest_slider_button']"
     # 图片刷新按钮
-    refresh_button_xpath = "//div[@class='geetest_panel_next']//div[@class='geetest_panel']//a[@class='geetest_refresh_1']"
+    xpath_refresh_button = "//div[@class='geetest_panel_next']//div[@class='geetest_panel']//a[@class='geetest_refresh_1']"
     # 超过图片次数刷新
-    error_refresh_button_xpath = "//div[@class='geetest_panel_box']//div[@class='geetest_panel_error_content']"
+    xpath_error_refresh_button = "//div[@class='geetest_panel_box']//div[@class='geetest_panel_error_content']"
 
     """用户参数"""
     # 用户名密码
@@ -57,7 +57,7 @@ class DKpc_LoginPage(Pyse):
             self.driver.save_screenshot(self.save_image_path)  # 屏幕截图
             move_distance = Bimd(self.save_image_path).move_distance()
             tracks = Bimd().get_tracks(move_distance)
-            dragger = self.driver.find_element_by_xpath(self.slider_button_xpath)
+            dragger = self.driver.find_element_by_xpath(self.xpath_slider_button)
 
             ActionChains(self.driver).click_and_hold(dragger).perform()
             for track in tracks:
@@ -70,10 +70,10 @@ class DKpc_LoginPage(Pyse):
             ActionChains(self.driver).release().perform()
 
         # 输入登录用户信息
-        self.send_keys(self.user_input_xpath, self.user)
-        self.send_keys(self.password_input_xpath, self.password)
+        self.send_keys(self.xpath_user_input, self.user)
+        self.send_keys(self.xpath_password_input, self.password)
         time.sleep(1)
-        self.find_element(*self.login_button_xpath).click()
+        self.find_element(*self.xpath_login_button).click()
 
         # 加载页面后先滑动一次滑块，如未成功再重试
         move_slider()
@@ -83,7 +83,7 @@ class DKpc_LoginPage(Pyse):
             while True:
                 try:
                     # 先查找滑块页面下部的刷新按钮，找到后刷新，如页面为找到该刷新按钮则找加载过多的刷新按钮
-                    dra = self.driver.find_element_by_xpath(self.refresh_button_xpath)
+                    dra = self.driver.find_element_by_xpath(self.xpath_refresh_button)
                     if dra:
                         dra.click()
                         move_slider()
@@ -91,8 +91,8 @@ class DKpc_LoginPage(Pyse):
                 except:
                     try:
                         # 未找到滑块下部的刷新按钮时，优先查找加载过多的刷新按钮
-                        error_button_element = self.driver.find_element_by_xpath(self.error_refresh_button_xpath)
-                        error_button_element.click()
+                        self.error_button_element = self.driver.find_element_by_xpath(self.xpath_error_refresh_button)
+                        self.error_button_element.click()
                         time.sleep(3)
                     except:
                         # 都未找到则跳出循环

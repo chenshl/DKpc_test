@@ -36,7 +36,7 @@ def report():
 fp = open(report(),'wb')
 Runner = HTMLTestRunner(
         stream=fp,
-        title='测试报告',
+        title='PC_UI自动化测试报告',
         description='测试用例执行情况'
             )
 

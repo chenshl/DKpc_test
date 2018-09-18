@@ -7,6 +7,7 @@ import unittest
 from BaseSe.Selenium3 import Pyse
 from Pages.DKpc_HomePage import DKpc_HomePage
 from Pages.DKpc_LoginPage import DKpc_LoginPage
+from Pages.DKpc_UcassetsPage import DKpc_UcassetsPage
 
 from selenium.webdriver.common.action_chains import ActionChains
 
@@ -14,6 +15,9 @@ import Data.DKpc_data as DKpcData
 from time import sleep
 
 class DKpcCase(unittest.TestCase):
+    """
+    @description: 用户登录状态页面元素浏览
+    """
 
     @classmethod
     def setUpClass(cls):
@@ -35,18 +39,24 @@ class DKpcCase(unittest.TestCase):
         driver.quit()
 
 
-    def test_DKpc_HomePage_view(self):
-        """测试预览页面,未登录状态"""
-        self.DKpc_startPage.open_Switch_exchange()
+    def test_switch_unlogin(self):
+        """
+        @description: 测试预览页面,未登录状态
+        :return: 
+        """
+        self.DKpc_startPage.switch_homePage_unlogin()
 
-    def test_login(self):
-        """用户登录"""
+    def test_switch_login(self):
+        """
+        @description: 用户登录and个人中心浏览
+        :return: 
+        """
         self.DKpc_startPage.open_loginPage()
-        DKpc_login = DKpc_LoginPage(self.driver, self.url, self.title)
-        DKpc_login.login_put()
+        self.DKpc_login = DKpc_LoginPage(self.driver, self.url, self.title)
+        self.DKpc_login.login_put()
         self.DKpc_startPage.open_uc_assets_page()
-
-
+        self.DKpc_Ucassets = DKpc_UcassetsPage(self.driver, self.url, self.title)
+        self.DKpc_Ucassets.browse_DKpc_UcassetsPage_elements()
 
 
 if __name__ == "__main__":
