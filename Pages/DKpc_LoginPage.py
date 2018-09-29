@@ -33,12 +33,16 @@ class DKpc_LoginPage(Pyse):
     # 超过图片次数刷新
     xpath_error_refresh_button = "//body//div[@class='geetest_panel geetest_wind'][1]//div[contains(text(), '请点击此处重试')]"
 
+    # 隐藏滑块缺口定位
+    xpath_hide_slider_gap = "//canvas[@class='geetest_canvas_fullbg geetest_fade geetest_absolute']"
+
     """用户参数"""
     # 用户名密码
     user = "17700000006"
     password = "cs111111"
     # 截图保存路径
     save_image_path = "E:\DKpc_test\Data\Image\quekou.png"
+    save_image_control_path = "E:\DKpc_test\Data\Image\quekou_control.png"
 
     def open(self):
         # 调用Selenium3中的_open()方法打开连接
@@ -54,8 +58,17 @@ class DKpc_LoginPage(Pyse):
             """
             # 拖动验证滑块,注：拖动定位不能使用（By.XPATH,""），否则报元组参数错误，使用基础的定位方法
             self.page_waiting()
+            # 执行JS,隐藏滑块缺口
+            hidden_gap = self.driver.find_element_by_xpath(self.xpath_hide_slider_gap)
+            self.driver.execute_script('arguments[0].removeAttribute(\"style\")', hidden_gap)
+            self.page_waiting()
             self.driver.save_screenshot(self.save_image_path)  # 屏幕截图
-            move_distance = Bimd(self.save_image_path).move_distance()
+            # 执行JS,还原滑块缺口
+            self.driver.execute_script('arguments[0].setAttribute(\"style\",\"display: none;\")', hidden_gap)
+            self.page_waiting()
+            self.driver.save_screenshot(self.save_image_control_path)
+
+            move_distance = Bimd(self.save_image_path, self.save_image_control_path).move_distance()
             tracks = Bimd().get_tracks(move_distance)
             dragger = self.driver.find_element_by_xpath(self.xpath_slider_button)
 

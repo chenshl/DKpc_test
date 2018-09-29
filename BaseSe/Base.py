@@ -23,9 +23,13 @@ class Base_image_move_distance(object):
     :return  lens
     """
 
-    def __init__(self, login_image_path="E:\DKpc_test\Data\Image\quekou.png"):
+    def __init__(self, login_image_path="E:\DKpc_test\Data\Image\quekou.png", login_image_control_path="E:\DKpc_test\Data\Image\quekou_control.png"):
         try:
             self.login_image_path = login_image_path
+            self.login_image_control_path = login_image_control_path
+
+            """
+            注：v1.1优化后不再调用contrast_OriginalImage方法对比事先存放的原图
             # 打开原图
             self.original_image_1 = Image.open("E:\DKpc_test\Data\Image\OriginalImage\OriginalImage_1.png")
             self.original_image_2 = Image.open("E:\DKpc_test\Data\Image\OriginalImage\OriginalImage_2.png")
@@ -35,8 +39,11 @@ class Base_image_move_distance(object):
             self.original_image_6 = Image.open("E:\DKpc_test\Data\Image\OriginalImage\OriginalImage_6.png")
             self.original_image_list = [self.original_image_1, self.original_image_2, self.original_image_3, self.original_image_4, self.original_image_5, self.original_image_6]
             # print(self.original_image_list)
+            """
+
             self.login_image = Image.open(self.login_image_path)
             # print(self.login_image)
+            self.login_image_control = Image.open(self.login_image_control_path)
         except Exception as e:
             print("图片打开失败：{}".format(e))
 
@@ -45,8 +52,9 @@ class Base_image_move_distance(object):
         极验验证滑块滑动距离处理
         :return lens = 缺口位置 - 起始位置
         """
-        orimage = self.contrast_OriginalImage()
-        lens = self.get_diff_location(self.login_image, orimage)
+        # orimage = self.contrast_OriginalImage()
+        # lens = self.get_diff_location(self.login_image, orimage)
+        lens = self.get_diff_location(self.login_image, self.login_image_control)
         return lens - 827 - 5  # -10为根据实际定位效果往回退10个像素
 
     def contrast_OriginalImage(self):
@@ -54,6 +62,7 @@ class Base_image_move_distance(object):
         截图同原图对照，获得原图
         :return original_image_list
         返回原图对象
+        注：v1.1优化后不再调用此方法
         """
         try:
             for i in self.original_image_list:
