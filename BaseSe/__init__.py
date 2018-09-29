@@ -8,3 +8,4 @@
 # 第三方库
 # pip install selenium
 # pip install Pillow
+# pip install redis

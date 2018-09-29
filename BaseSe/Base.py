@@ -99,7 +99,7 @@ class Base_image_move_distance(object):
         pixel1 = image1.getpixel((x, y))
         pixel2 = image2.getpixel((x, y))
         # 截图像素也许存在误差，50作为容差范围
-        if abs(pixel1[0]-pixel2[0])>=10 and abs(pixel1[1]-pixel2[1])>=10 and abs(pixel1[2]-pixel2[2])>=10:
+        if abs(pixel1[0]-pixel2[0])>=50 and abs(pixel1[1]-pixel2[1])>=50 and abs(pixel1[2]-pixel2[2])>=50:
             return False
         return True
 
