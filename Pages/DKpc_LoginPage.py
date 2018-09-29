@@ -31,7 +31,7 @@ class DKpc_LoginPage(Pyse):
     # 图片刷新按钮
     xpath_refresh_button = "//div[@class='geetest_panel_next']//div[@class='geetest_panel']//a[@class='geetest_refresh_1']"
     # 超过图片次数刷新
-    xpath_error_refresh_button = "//body//div[@class='geetest_panel geetest_wind'][3]//div[contains(text(), '请点击此处重试')]"
+    xpath_error_refresh_button = "//body//div[@class='geetest_panel geetest_wind'][1]//div[contains(text(), '请点击此处重试')]"
 
     """用户参数"""
     # 用户名密码

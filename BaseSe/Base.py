@@ -8,9 +8,18 @@ import requests
 
 class Base_image_move_distance(object):
     """
+    v1.0
+    date : 2018/08/10
     登录页面获取极验滑块验证码滑动距离类
     处理方式：暂时将无缺口的原图保存在本地，通过有缺口的截图同原图对比方式获得滑动位移距离
     :param   login_image_path="E:\DKpc_test\Data\Image\quekou.png"
+    :return  lens
+    
+    v1.1
+    date : 2018/09/29
+    优化登录滑块处理方式：
+    页面弹出滑块验证后，修改页面JS隐藏缺口及滑块，截图保存作为对照；修改页面JS还原缺口及滑块，截图保存后计算对比缺口位移
+    :param   截图：login_image_path="E:\DKpc_test\Data\Image\quekou.png";  对照：login_image_path_control_path
     :return  lens
     """
 
@@ -38,7 +47,7 @@ class Base_image_move_distance(object):
         """
         orimage = self.contrast_OriginalImage()
         lens = self.get_diff_location(self.login_image, orimage)
-        return lens - 827 -10  # -10为根据实际定位效果往回退10个像素
+        return lens - 827 - 5  # -10为根据实际定位效果往回退10个像素
 
     def contrast_OriginalImage(self):
         """

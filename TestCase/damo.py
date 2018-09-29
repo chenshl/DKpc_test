@@ -6,7 +6,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 import time
 
 
-class image_test1(object):
+class image_damo1(object):
     # 计算滑块位移距离
     def get_diff_location(self, image1,image2):
         #（880,1082）（344,490）为滑块图片区域，可能会受到一些清晰度的影响，可根据实际情况修改
@@ -91,32 +91,104 @@ class image_test1(object):
 #     time.sleep(3)
 #     driver.quit()
 
-class image_test3(object):
-    """selenium运行js修改页面参数"""
+class image_damo3(object):
+    """selenium运行js修改页面参数:
+    
+    ***
+    1.删除页面元素只读属性的方法（移除对象的某个属性）：
+    d=driver.find_element_by_xpath("//*[@id='divform']/div[2]/ul[2]/li[3]/span[2]/input[1]")
+    driver.execute_script('arguments[0].removeAttribute(\"readonly\")', d);
+    2.为页面对象设置属性的方法：
+    "document.getElementById('eid').setAttribute('value','3240383');"
+    3.修改页面对象属性的值
+    js = "var q=document.getElementsByClassName(\"nav xs-hide ivu-menu ivu-menu-light ivu-menu-vertical\")[0]; q.style.width=\"200px\""
+    or:
+    da = driver.find_element_by_xpath("//canvas[@class='geetest_canvas_fullbg geetest_fade geetest_absolute']")
+    driver.execute_script('arguments[0].removeAttribute(\"style\")', da)
+    
+    ***
+    JS中通过XPATH定位元素的方法：
+    function _x(STR_XPATH) {
+    var xresult = document.evaluate(STR_XPATH, document, null, XPathResult.ANY_TYPE, null);
+    var xnodes = [];
+    var xres;
+    while (xres = xresult.iterateNext()) {
+        xnodes.push(xres);
+    }
+    return xnodes;
+    }
+    """
 
     driver = webdriver.Chrome()
-    driver.get("https://www.baidu.com/")
-    # 给搜索输入框标红javascript脚本
-    js = "var q=document.getElementById(\"kw\");q.style.border=\"2px solid red\";"
-    # 调用给搜索输入框标红js脚本
-    driver.execute_script(js)
-    time.sleep(3)
-    # 单独执行js脚本
-    driver.execute_script('alert("输入框标红了!")')
-    time.sleep(3)
-    # 接受提示信息
-    driver.switch_to_alert().accept()
-    time.sleep(3)
-    # js隐藏元素,将获取的图片元素隐藏
-    img1 = driver.find_element_by_xpath("//*[@id='lg']/img")
-    driver.execute_script('$(arguments[0]).fadeOut()', img1)
-    time.sleep(3)
-    driver.find_element_by_xpath("//*[@id='kw']").send_keys("selenium")
-    driver.find_element_by_xpath("//*[@id='su']").click()
-    time.sleep(3)
+    # driver.get("https://www.baidu.com/")
+    # # 给搜索输入框标红javascript脚本
+    # js = "var q=document.getElementById(\"kw\");q.style.border=\"3px solid red\";"
+    # # 调用给搜索输入框标红js脚本
+    # driver.execute_script(js)
+    # time.sleep(1)
+    # js = "var q=document.getElementById(\"lg\");q.innerHTML=\"原来显示图片的位置已经被篡改了！\";q.style.color = \"#ff0000\";"
+    # driver.execute_script(js)
+    # time.sleep(1)
+    # # 单独执行js脚本
+    # driver.execute_script('alert("输入框标红了!")')
+    # time.sleep(1)
+    # # 接受提示信息
+    # driver.switch_to_alert().accept()
+    # time.sleep(1)
+    # # js隐藏元素,将获取的图片元素隐藏
+    # img1 = driver.find_element_by_xpath("//*[@id='lg']")
+    # driver.execute_script('$(arguments[0]).fadeOut()', img1)
+    # time.sleep(1)
+    # driver.find_element_by_xpath("//*[@id='kw']").send_keys("selenium")
+    # driver.find_element_by_xpath("//*[@id='su']").click()
+    # time.sleep(1)
+
+
+
+    # driver.get("http://www.400.pro/#/")
+    # driver.execute_script("alert('执行自己的JS了。。。')")
+    # time.sleep(1)
+    # driver.switch_to_alert().accept()
+    # js1 = "var q=document.getElementById(\"fullpage\"); q.style.border=\"2px solid red\";"
+    # driver.execute_script(js1)
+    # time.sleep(1)
+    # text1 = driver.find_element_by_xpath("//div[@class='silkContainer']/h1")
+    # driver.execute_script("$(arguments[0]).fadeOut()", text1)
+    # time.sleep(2)
+
+    # driver.get("http://www.400.pro/#/exchange/slu_usdt")
+    # time.sleep(2)
+    # ss = driver.find_element_by_xpath("/html/body/div[1]/div[2]")
+    # driver.execute_script("$(style.left=500px)", ss)
+
+    driver.get("http://www.400.pro/#/login")
+    driver.maximize_window()
+    time.sleep(15)
+    # imgbox = driver.find_element_by_xpath("//div[@class='geetest_canvas_img geetest_absolute']/canvas")
+    # imgbox = driver.find_element_by_xpath("//div[@class='ivu-form-item-content']//input[@type='password']")
+    # imgbox = driver.find_element_by_xpath("//div[@class='ivu-form-item-content']//button")
+    # js = "var q=document.getElementsByClassName(\"nav xs-hide ivu-menu ivu-menu-light ivu-menu-vertical\")[0]; q.style.width=\"200px\""
+    # time.sleep(1)
+    # driver.execute_script(js)
+    # time.sleep(1)
+    #
+    # imgbox = driver.find_element_by_xpath("//div[@class='silkContainer']/ul")
+    # time.sleep(1)
+    # imgbox.click()
+    # driver.execute_script('$(arguments[0]).click()', imgbox)
+    # driver.execute_script('arguments[0].removeAttribute(\"style\")', imgbox)
+    # js = "var q=document.getElementsByClassName(\"geetest_canvas_fullbg geetest_fade geetest_absolute\")[0]; q.style.display=\"true\""
+    da = driver.find_element_by_xpath("//canvas[@class='geetest_canvas_fullbg geetest_fade geetest_absolute']")
+    driver.execute_script('arguments[0].removeAttribute(\"style\")', da)
+    time.sleep(2)
+    driver.execute_script('arguments[0].setAttribute(\"style\",\"display: none;\")', da)
+
+
+    time.sleep(4)
+
     driver.quit()
 
 
 
 if __name__ == "__main__":
-    image_test3()
+    image_damo3()

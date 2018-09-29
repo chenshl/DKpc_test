@@ -50,7 +50,7 @@ class DKpc_UcassetsPage(Pyse):
 
     # JS
     # 移除时间控件输入禁止
-    js_remove_time_control = "$('//input[@class='ivu-input ivu-input-large']').removeAttr('readonly')"
+    js_remove_time_control = "$(\"//input[@class='ivu-input ivu-input-large']\").removeAttr('readonly')"
 
     def browse_DKpc_UcassetsPage_elements(self):
         """
@@ -60,8 +60,12 @@ class DKpc_UcassetsPage(Pyse):
         self.page_waiting()
         self.find_element(*self.xpath_billing_Details).click()
         self.page_waiting()
-        # self.driver.execute_script(self.js_remove_time_control)
-        # self.page_waiting()
+
+        # exchange = self.driver.find_element_by_xpath("//input[@class='ivu-input ivu-input-large']")
+        # self.driver.execute_script("removeAttr('readonly')", exchange)
+        # exchange.click()
+
+        self.page_waiting()
         self.find_element(*self.xpath_my_assets).click()
         self.page_waiting()
         self.find_element(*self.xpath_coin_in).click()
