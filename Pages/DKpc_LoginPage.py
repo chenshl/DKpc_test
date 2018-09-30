@@ -154,18 +154,20 @@ class DKpc_LoginPage(Pyse):
         self.slide()
 
 
-    # 注册
     def register_put(self):
-        """"""
+        """
+        @description: 新用户注册流程
+        :return: 
+        """
         self.register_mobile = str(int(connect_mysql().connect2mysql(self.sql_registed_mobile)[0][0]) + 1)
         self.send_keys(self.xpath_register_mobile, self.register_mobile)
         self.find_element(*self.xpath_register_message_button).click()
         self.find_element(*self.xpath_register_message_type_button).click()
         self.page_waiting()
-
         # 滑动滑块
         self.slide()
 
+        # 注册
         time.sleep(2)
         self.redis_key = "PHONE_REG_CODE_" + self.register_mobile
         messageNum = Connect_redis().get_redis(self.redis_key)
@@ -173,4 +175,11 @@ class DKpc_LoginPage(Pyse):
         self.send_keys(self.xpath_register_password, self.password)
         self.page_waiting()
         self.find_element(*self.xpath_register_button).click()
+
+        # 新用户登录
+        self.send_keys(self.xpath_user_input, self.register_mobile)
+        self.send_keys(self.xpath_password_input, self.password)
+        self.page_waiting()
+        self.find_element(*self.xpath_login_button).click()
+        self.slide()
 

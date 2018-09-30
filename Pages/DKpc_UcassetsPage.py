@@ -40,6 +40,16 @@ class DKpc_UcassetsPage(Pyse):
     xpath_account_information = (By.XPATH, "//div[@class='ucMenu']//li[contains(text(),'账号信息')]")
     # 身份认证
     xpath_authentication = (By.XPATH, "//div[@class='ucMenu']//li[contains(text(),'身份认证')]")
+    # 身份认证_姓名输入框
+    xpath_name_input = (By.XPATH, "//div[@class='ivu-form-item-content']//input[@placeholder='请输入真实姓名']")
+    # 身份认证_身份证号输入框
+    xpath_IDCard_num_input = (By.XPATH, "//div[@class='ivu-form-item-content']//input[@placeholder='请输入证件号']")
+    # 身份认证_身份证图片上传框，有三个相同属性的元素
+    xpath_IDCard_image_input_first = "//div[@class='mt10 uploadCard ivu-row']/div[1]/div[1]/div[1]/input"
+    xpath_IDCard_image_input_second = "//div[@class='mt10 uploadCard ivu-row']/div[2]/div[1]/div[1]/input"
+    xpath_IDCard_image_input_third = "//div[@class='mt10 uploadCard ivu-row']/div[3]/div[1]/div[1]/input"
+    # 身份认证_确定按钮
+    xpath_enter_button = (By.XPATH, "//div[@class='ivu-form-item-content']//button[@class='ivu-btn ivu-btn-primary ivu-btn-large']")
     # 安全设置
     xpath_security_Settings = (By.XPATH, "//div[@class='ucMenu']//li[contains(text(),'安全设置')]")
     # 支付方式
@@ -83,3 +93,24 @@ class DKpc_UcassetsPage(Pyse):
         self.find_element(*self.xpath_payment_method).click()
         self.page_waiting()
         self.find_element(*self.xpath_registration_invitation).click()
+
+
+    def revise_user_datas(self):
+        """
+        @description: 
+        :return: 
+        """
+        # 实名认证
+        self.find_element(*self.xpath_account_security).click()
+        self.find_element(*self.xpath_authentication).click()
+        self.send_keys(self.xpath_name_input, "测试二十三")
+        self.send_keys(self.xpath_IDCard_num_input, "500234198412231155")
+        self.page_waiting()
+        self.driver.find_element_by_xpath(self.xpath_IDCard_image_input_first).send_keys("E:\DKpc_test\Data\Image\quekou.png")
+        self.driver.find_element_by_xpath(self.xpath_IDCard_image_input_second).send_keys("E:\DKpc_test\Data\Image\quekou.png")
+        self.driver.find_element_by_xpath(self.xpath_IDCard_image_input_third).send_keys("E:\DKpc_test\Data\Image\quekou.png")
+        time.sleep(3)
+        self.find_element(*self.xpath_enter_button).click()
+
+
+
