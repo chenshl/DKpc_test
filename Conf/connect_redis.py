@@ -4,6 +4,7 @@
 # 连接Redis
 
 import redis
+import json
 
 class Connect_redis(object):
 
@@ -25,7 +26,7 @@ class Connect_redis(object):
         :param key: 查询键值
         :return: values
         """
-        return bytes.decode(self.con_redis.get(key))
+        return json.loads(bytes.decode(self.con_redis.get(key)))
 
     def set_redis(self, key, values):
 
@@ -41,3 +42,5 @@ class Connect_redis(object):
 if __name__ == "__main__":
     r = Connect_redis().get_redis("entity:appRevision:ANDROID")
     print(r)
+    print(type(r))
+    print(r[1]["downloadUrl"])

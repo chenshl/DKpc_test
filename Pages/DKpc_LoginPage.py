@@ -20,6 +20,7 @@ class DKpc_LoginPage(Pyse):
     # 登录按钮
     xpath_login_button = (By.XPATH, "//div[@class='ivu-form-item-content']//button[@id='loginBut']")
 
+
     # 忘记密码
     xpath_find_pwd = (By.XPATH, "//form[@autocomplete='off']//p//a")
     # 跳转回登录页面登录按钮
@@ -33,8 +34,10 @@ class DKpc_LoginPage(Pyse):
     # 超过图片次数刷新
     xpath_error_refresh_button = "//body//div[@class='geetest_panel geetest_wind'][1]//div[contains(text(), '请点击此处重试')]"
 
+
     # 隐藏滑块缺口定位
     xpath_hide_slider_gap = "//canvas[@class='geetest_canvas_fullbg geetest_fade geetest_absolute']"
+
 
     """用户参数"""
     # 用户名密码
@@ -115,4 +118,6 @@ class DKpc_LoginPage(Pyse):
             self.driver.quit()
 
 
+    def register_put(self):
+        """"""
 
