@@ -26,7 +26,11 @@ class Connect_redis(object):
         :param key: 查询键值
         :return: values
         """
-        return json.loads(bytes.decode(self.con_redis.get(key)))
+        try:
+            return json.loads(bytes.decode(self.con_redis.get(key)))
+        except Exception as e:
+            print("查询结果错误或为空：{}".format(e))
+            return "null"
 
     def set_redis(self, key, values):
 
@@ -40,7 +44,7 @@ class Connect_redis(object):
 
 
 if __name__ == "__main__":
-    r = Connect_redis().get_redis("entity:appRevision:ANDROID")
+    r = Connect_redis().get_redis("PHONE_REG_CODE_17700000022")
     print(r)
     print(type(r))
-    print(r[1]["downloadUrl"])
+    # print(r[1]["downloadUrl"])

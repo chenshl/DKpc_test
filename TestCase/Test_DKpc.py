@@ -60,6 +60,13 @@ class DKpcCase(unittest.TestCase):
         self.DKpc_Ucassets = DKpc_UcassetsPage(self.driver, self.url, self.title)
         self.DKpc_Ucassets.browse_DKpc_UcassetsPage_elements()
 
+    def test_3_registAndLogin(self):
+        """"""
+        self.DKpc_startPage.open_registerPage()
+        self.DKpc_register = DKpc_LoginPage(self.driver, self.url, self.title)
+        self.DKpc_register.register_put()
+
+
 
 if __name__ == "__main__":
     unittest.main()

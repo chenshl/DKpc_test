@@ -26,6 +26,8 @@ class DKpc_HomePage(Pyse):
 
     # 登录按钮
     xpath_button_jump_login = (By.XPATH, "//ul[@class='ivu-menu']//a[@href='#/login']")
+    # 注册按钮
+    xpath_button_jump_register = (By.XPATH, "//ul[@class='ivu-menu']//a[@href='#/register']")
 
     # 上部滚动广告
     # 公告通知列表
@@ -142,6 +144,14 @@ class DKpc_HomePage(Pyse):
         :return: 
         """
         self.find_element(*self. xpath_button_jump_login).click()
+
+
+    def open_registerPage(self):
+        """
+        @description: 跳转注册页面
+        :return: 
+        """
+        self.find_element(*self.xpath_button_jump_register).click()
 
 
     def open_uc_assets_page(self):

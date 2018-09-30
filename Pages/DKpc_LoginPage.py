@@ -9,6 +9,8 @@ import time
 
 from BaseSe.Selenium3 import Pyse
 from BaseSe.Base import Base_image_move_distance as Bimd
+from Conf.connect_mysql import connect_mysql
+from Conf.connect_redis import Connect_redis
 
 class DKpc_LoginPage(Pyse):
 
@@ -39,6 +41,27 @@ class DKpc_LoginPage(Pyse):
     xpath_hide_slider_gap = "//canvas[@class='geetest_canvas_fullbg geetest_fade geetest_absolute']"
 
 
+    # 查询最新一条用户注册使用的手机号
+    sql_registed_mobile = "SELECT mobile_phone FROM member WHERE mobile_phone LIKE '1770000%'ORDER BY mobile_phone DESC LIMIT 1;"
+
+
+    # 注册
+    # 注册手机号输入框
+    xpath_register_mobile = (By.XPATH, "//div[@class='ivu-input-wrapper ivu-input-type']//input[@placeholder='请输入您的手机号']")
+    # 获取验证码按钮
+    xpath_register_message_button = (By.XPATH, "//input[@id='sendCode']")
+    # 验证码发送方式确认按钮
+    xpath_register_message_type_button = (By.XPATH, "//button[@class='ivu-btn ivu-btn-primary ivu-btn-long ivu-btn-large']")
+    # 注册验证码输入框
+    xpath_register_message = (By.XPATH, "//div[@class='ivu-input-wrapper ivu-input-type']//input[@placeholder='请输入验证码']")
+    # 注册登录密码输入框
+    xpath_register_password = (By.XPATH, "//div[@class='ivu-input-wrapper ivu-input-type']//input[@placeholder='请设置登录密码']")
+    # 注册邀请码输入框
+    xpath_register_inviteCode = (By.XPATH, "//div[@class='ivu-input-wrapper ivu-input-type']//input[@placeholder='邀请码（选填）']")
+    # 注册按钮
+    xpath_register_button = (By.XPATH, "//button[@class='loginBut ivu-btn ivu-btn-primary ivu-btn-large']")
+
+
     """用户参数"""
     # 用户名密码
     user = "17700000006"
@@ -51,12 +74,16 @@ class DKpc_LoginPage(Pyse):
         # 调用Selenium3中的_open()方法打开连接
         self._open(self.base_url, self.pagetitle)
 
-    def login_put(self):
-        """登录"""
 
+    # 滑动
+    def slide(self):
+        """
+        @description: 登录注册页面滑动滑块方法封装，页面上的滑块直接调用slide即可
+        :return: 
+        """
         def move_slider():
             """
-            登录页面滑动滑块方法，便于失败后重试
+            登录注册页面滑动滑块方法，便于失败后重试
             :return: 
             """
             # 拖动验证滑块,注：拖动定位不能使用（By.XPATH,""），否则报元组参数错误，使用基础的定位方法
@@ -85,13 +112,6 @@ class DKpc_LoginPage(Pyse):
             time.sleep(0.5)  # 0.5秒后释放鼠标
             ActionChains(self.driver).release().perform()
 
-        # 输入登录用户信息
-        self.send_keys(self.xpath_user_input, self.user)
-        self.send_keys(self.xpath_password_input, self.password)
-        self.page_waiting()
-        self.find_element(*self.xpath_login_button).click()
-
-        # 加载页面后先滑动一次滑块，如未成功再重试
         move_slider()
         time.sleep(3)
         # 重试滑块
@@ -118,6 +138,39 @@ class DKpc_LoginPage(Pyse):
             self.driver.quit()
 
 
+    def login_put(self):
+        """
+        @description: 登录
+        :return: 
+        """
+
+        # 输入登录用户信息
+        self.send_keys(self.xpath_user_input, self.user)
+        self.send_keys(self.xpath_password_input, self.password)
+        self.page_waiting()
+        self.find_element(*self.xpath_login_button).click()
+
+        # 滑动
+        self.slide()
+
+
+    # 注册
     def register_put(self):
         """"""
+        self.register_mobile = str(int(connect_mysql().connect2mysql(self.sql_registed_mobile)[0][0]) + 1)
+        self.send_keys(self.xpath_register_mobile, self.register_mobile)
+        self.find_element(*self.xpath_register_message_button).click()
+        self.find_element(*self.xpath_register_message_type_button).click()
+        self.page_waiting()
+
+        # 滑动滑块
+        self.slide()
+
+        time.sleep(2)
+        self.redis_key = "PHONE_REG_CODE_" + self.register_mobile
+        messageNum = Connect_redis().get_redis(self.redis_key)
+        self.send_keys(self.xpath_register_message, messageNum)
+        self.send_keys(self.xpath_register_password, self.password)
+        self.page_waiting()
+        self.find_element(*self.xpath_register_button).click()
 
