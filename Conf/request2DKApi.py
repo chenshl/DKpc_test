@@ -70,7 +70,7 @@ class request2DKApi(object):
 
 
 if __name__ == "__main__":
-    id = "2182"
+    id = "2185"
     server = "admin/member/member-application/{}/pass".format(id)
     r = request2DKApi(server).send("PATCH")
     print(r)

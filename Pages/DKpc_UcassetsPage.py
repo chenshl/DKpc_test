@@ -97,13 +97,13 @@ class DKpc_UcassetsPage(Pyse):
 
     def revise_user_datas(self):
         """
-        @description: 
+        @description: 新用户添加及修改用户绑定数据
         :return: 
         """
         # 实名认证
         self.find_element(*self.xpath_account_security).click()
         self.find_element(*self.xpath_authentication).click()
-        self.send_keys(self.xpath_name_input, "测试二十三")
+        self.send_keys(self.xpath_name_input, "测试二十四")
         self.send_keys(self.xpath_IDCard_num_input, "500234198412231155")
         self.page_waiting()
         self.driver.find_element_by_xpath(self.xpath_IDCard_image_input_first).send_keys("E:\DKpc_test\Data\Image\quekou.png")

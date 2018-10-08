@@ -89,14 +89,12 @@ class connect_mysql():
 
 
 if __name__ == "__main__":
-    sql = '''SELECT coin_id, balance, frozen_balance, lock_balance 
-    FROM member_wallet 
-    WHERE member_id = (SELECT id FROM member WHERE token = '754e216e9de6eca2a8bf9749797b29c2') AND coin_id IN('Silubium', 'USDT');
-    '''
+    user_mobile = "17700000037"
+    sql = "SELECT id FROM member_application WHERE member_id = (SELECT id FROM member WHERE mobile_phone = '{}') AND audit_status = 0;".format(user_mobile)
     result = connect_mysql().connect2mysql(sql)
     print(type(result))
     print(result)
-    print(result[1][1])
-    resultformat = connect_mysql().mysqlResultFormat(result, ["coin_id", "balance", "frozen_balance", "lock_balance"])
-    print(resultformat)
-    print(resultformat[0]["coin_id"])
+    print(result[0][0])
+    # resultformat = connect_mysql().mysqlResultFormat(result, ["coin_id", "balance", "frozen_balance", "lock_balance"])
+    # print(resultformat)
+    # print(resultformat[0]["coin_id"])

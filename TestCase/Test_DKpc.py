@@ -12,8 +12,9 @@ from Pages.DKpc_UcassetsPage import DKpc_UcassetsPage
 from selenium.webdriver.common.action_chains import ActionChains
 
 import Data.DKpc_data as DKpcData
+from Conf.connect_mysql import connect_mysql
 from Conf.request2DKApi import request2DKApi
-from time import sleep
+import time
 
 class DKpcCase(unittest.TestCase):
     """
@@ -36,7 +37,11 @@ class DKpcCase(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         driver = cls.driver
-        sleep(5)
+
+        # 修改实名身份证号
+        connect_mysql().connect2mysql("UPDATE member SET id_number = 'auto111111' WHERE id_number = '500234198412231155';")
+
+        time.sleep(5)
         driver.quit()
 
 
@@ -67,12 +72,13 @@ class DKpcCase(unittest.TestCase):
         @description: 新用户注册及实名绑定等操作
         :return: 
         """
-        注册登录
+        # 注册登录
         self.DKpc_startPage.open_registerPage()
         self.DKpc_register = DKpc_LoginPage(self.driver, self.url, self.title)
         self.DKpc_register.register_put()
+        time.sleep(2)
 
-        sleep(15)
+        # time.sleep(15)
 
         # 实名认证
         self.DKpc_startPage.open_uc_assets_page()
@@ -80,8 +86,10 @@ class DKpcCase(unittest.TestCase):
         self.DKpc_Ucassets.revise_user_datas()
 
         # 调用后台接口完成实名认证审核
-        id = "2182"
-        request2DKApi("admin/member/member-application/{}/pass".format(id)).send("PATCH")
+        user_mobile = self.DKpc_register.register_mobile
+        time.sleep(2)
+        member_application = connect_mysql().connect2mysql("SELECT id FROM member_application WHERE member_id = (SELECT id FROM member WHERE mobile_phone = '{}') AND audit_status = 0;".format(user_mobile))
+        request2DKApi("admin/member/member-application/{}/pass".format(member_application[0][0])).send("PATCH")
 
 
 if __name__ == "__main__":

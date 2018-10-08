@@ -70,6 +70,9 @@ class DKpc_LoginPage(Pyse):
     save_image_path = "E:\DKpc_test\Data\Image\quekou.png"
     save_image_control_path = "E:\DKpc_test\Data\Image\quekou_control.png"
 
+    # 注册新用户电话号码
+    register_mobile = str(int(connect_mysql().connect2mysql(sql_registed_mobile)[0][0]) + 1)
+
     def open(self):
         # 调用Selenium3中的_open()方法打开连接
         self._open(self.base_url, self.pagetitle)
@@ -159,7 +162,7 @@ class DKpc_LoginPage(Pyse):
         @description: 新用户注册流程
         :return: 
         """
-        self.register_mobile = str(int(connect_mysql().connect2mysql(self.sql_registed_mobile)[0][0]) + 1)
+        # self.register_mobile = str(int(connect_mysql().connect2mysql(self.sql_registed_mobile)[0][0]) + 1)
         self.send_keys(self.xpath_register_mobile, self.register_mobile)
         self.find_element(*self.xpath_register_message_button).click()
         self.find_element(*self.xpath_register_message_type_button).click()
@@ -175,11 +178,16 @@ class DKpc_LoginPage(Pyse):
         self.send_keys(self.xpath_register_password, self.password)
         self.page_waiting()
         self.find_element(*self.xpath_register_button).click()
+        # 等待注册成功后跳转登录页面
+        time.sleep(4)
 
         # 新用户登录
+        self.driver.refresh()
+        self.page_waiting()
         self.send_keys(self.xpath_user_input, self.register_mobile)
         self.send_keys(self.xpath_password_input, self.password)
         self.page_waiting()
         self.find_element(*self.xpath_login_button).click()
         self.slide()
+        time.sleep(1)
 
