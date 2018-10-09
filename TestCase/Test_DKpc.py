@@ -69,7 +69,7 @@ class DKpcCase(unittest.TestCase):
 
     def test_3_registAndLogin(self):
         """
-        @description: 新用户注册及实名绑定等操作
+        @description: 新用户注册及实名绑定设置资金密码等操作
         :return: 
         """
         # 注册登录
@@ -90,6 +90,9 @@ class DKpcCase(unittest.TestCase):
         time.sleep(2)
         member_application = connect_mysql().connect2mysql("SELECT id FROM member_application WHERE member_id = (SELECT id FROM member WHERE mobile_phone = '{}') AND audit_status = 0;".format(user_mobile))
         request2DKApi("admin/member/member-application/{}/pass".format(member_application[0][0])).send("PATCH")
+
+        # 设置资金密码
+        self.DKpc_Ucassets.set_fund_password()
 
 
 if __name__ == "__main__":

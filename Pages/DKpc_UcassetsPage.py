@@ -8,6 +8,9 @@ from selenium.webdriver.common.action_chains import ActionChains
 import time
 
 from BaseSe.Selenium3 import Pyse
+from Conf.connect_redis import Connect_redis
+from Conf.connect_mysql import connect_mysql
+
 
 class DKpc_UcassetsPage(Pyse):
 
@@ -52,6 +55,16 @@ class DKpc_UcassetsPage(Pyse):
     xpath_enter_button = (By.XPATH, "//div[@class='ivu-form-item-content']//button[@class='ivu-btn ivu-btn-primary ivu-btn-large']")
     # 安全设置
     xpath_security_Settings = (By.XPATH, "//div[@class='ucMenu']//li[contains(text(),'安全设置')]")
+    # 安全设置_设置资金密码
+    xpath_security_Settings_fund_password = (By.XPATH, "//ul[@class='accList']/li[1]/div[@class='accInfo']/a")
+    # 安全设置_资金密码输入框
+    xpath_security_Settings_fund_password_input = (By.XPATH, "//form[@class='formGroup ivu-form ivu-form-label-left']/div[@class='ivu-form-item'][1]//input")
+    # 安全设置_短信验证码输入框
+    xpath_security_Settings_SMS_code = (By.XPATH, "//form[@class='formGroup ivu-form ivu-form-label-left']/div[@class='ivu-form-item'][2]//input")
+    # 安全设置_短信验证码发送按钮
+    xpath_security_Settings_SMS_code_button = (By.XPATH, "//form[@class='formGroup ivu-form ivu-form-label-left']/div[@class='ivu-form-item'][2]//button")
+    # 安全设置_资金密码提交按钮
+    xpath_security_Settings_submit = (By.XPATH, "//form[@class='formGroup ivu-form ivu-form-label-left']/div[@class='ivu-form-item'][3]//button")
     # 支付方式
     xpath_payment_method = (By.XPATH, "//div[@class='ucMenu']//li[contains(text(),'支付方式')]")
 
@@ -61,6 +74,7 @@ class DKpc_UcassetsPage(Pyse):
     # JS
     # 移除时间控件输入禁止
     js_remove_time_control = "$(\"//input[@class='ivu-input ivu-input-large']\").removeAttr('readonly')"
+
 
     def browse_DKpc_UcassetsPage_elements(self):
         """
@@ -111,6 +125,28 @@ class DKpc_UcassetsPage(Pyse):
         self.driver.find_element_by_xpath(self.xpath_IDCard_image_input_third).send_keys("E:\DKpc_test\Data\Image\quekou.png")
         time.sleep(3)
         self.find_element(*self.xpath_enter_button).click()
+
+    # 设置资金密码
+    def set_fund_password(self):
+        self.page_waiting()
+        self.find_element(*self.xpath_security_Settings).click()
+        self.page_waiting()
+        self.find_element(*self.xpath_security_Settings_fund_password).click()
+        self.send_keys(self.xpath_security_Settings_fund_password_input, "111111")
+        self.find_element(*self.xpath_security_Settings_SMS_code_button).click()
+        self.page_waiting()
+
+        mobile_phone = str(connect_mysql().connect2mysql("SELECT mobile_phone FROM member WHERE mobile_phone LIKE '1770000%' ORDER BY id DESC LIMIT 1;")[0][0])
+        security_SMS_code = Connect_redis().get_redis("PHONE_RESET_TRANS_CODE_" + mobile_phone)
+        time.sleep(2)
+        self.send_keys(self.xpath_security_Settings_SMS_code, security_SMS_code)
+        self.find_element(*self.xpath_security_Settings_submit).click()
+
+
+
+
+
+
 
 
 

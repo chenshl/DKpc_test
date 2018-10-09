@@ -44,7 +44,7 @@ class Connect_redis(object):
 
 
 if __name__ == "__main__":
-    r = Connect_redis().get_redis("PHONE_REG_CODE_17700000022")
+    r = Connect_redis().get_redis("PHONE_RESET_TRANS_CODE_17700000041")
     print(r)
     print(type(r))
     # print(r[1]["downloadUrl"])
