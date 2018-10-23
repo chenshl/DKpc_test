@@ -126,8 +126,12 @@ class DKpc_UcassetsPage(Pyse):
         time.sleep(3)
         self.find_element(*self.xpath_enter_button).click()
 
-    # 设置资金密码
+
     def set_fund_password(self):
+        """
+        @description:设置资金密码
+        :return: 
+        """
         self.page_waiting()
         self.find_element(*self.xpath_security_Settings).click()
         self.page_waiting()
@@ -136,6 +140,7 @@ class DKpc_UcassetsPage(Pyse):
         self.find_element(*self.xpath_security_Settings_SMS_code_button).click()
         self.page_waiting()
 
+        # 查询用户手机号
         mobile_phone = str(connect_mysql().connect2mysql("SELECT mobile_phone FROM member WHERE mobile_phone LIKE '1770000%' ORDER BY id DESC LIMIT 1;")[0][0])
         security_SMS_code = Connect_redis().get_redis("PHONE_RESET_TRANS_CODE_" + mobile_phone)
         time.sleep(2)
